@@ -58,7 +58,11 @@ def upload_file(request):
 
 def select_table(request):
     if request.method == 'POST':
-        print(request.POST.get('sheet'))
-        print(request.POST.get('table'))
+        response_data = {
+            request.POST.get('sheet'),
+            request.POST.get('table')
+        }
 
-        
+        return JsonResponse(response_data)
+    else:
+        return HttpResponse("Method not allowed", status=405)

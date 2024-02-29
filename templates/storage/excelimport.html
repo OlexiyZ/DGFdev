@@ -4,47 +4,6 @@
     <meta charset="UTF-8">
     <title>Excel Operations</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{#    <script src="uploadFile.js"></script>#}
-{#    <script>#}
-{#        $(document).ready(function() {#}
-{#            // Load worksheets into the listbox when the page loads#}
-{#            loadWorksheets();#}
-{##}
-{#            // Event handler for when the worksheet selection changes#}
-{#            $('#worksheet-listbox').change(function() {#}
-{#                var selectedWorksheet = $(this).val();#}
-{#                loadTableNames(selectedWorksheet);#}
-{#            });#}
-{##}
-{#            // Function to load worksheet titles into the listbox#}
-{#            function loadWorksheets() {#}
-{#                // Example AJAX call to get worksheets from the server#}
-{#                $.get('', function(data) {#}
-{#                    $('#worksheet-listbox').empty();#}
-{#                    $.each(data["{{ sheet }}"] , function(i, worksheet) {#}
-{#                        $('#worksheet-listbox').append($('<option>', {#}
-{#                            value: worksheet,#}
-{#                            text: worksheet#}
-{#                        }));#}
-{#                    });#}
-{#                });#}
-{#            }#}
-{##}
-{#            // Function to load table names based on the selected worksheet#}
-{#            function loadTableNames(worksheet) {#}
-{#                // Example AJAX call to get table names from the server#}
-{#                $.get('/url-to-get-table-names/?worksheet=' + worksheet, function(data) {#}
-{#                    $('#table-names-listbox').empty();#}
-{#                    $.each(data.tableNames, function(i, tableName) {#}
-{#                        $('#table-names-listbox').append($('<option>', {#}
-{#                            value: tableName,#}
-{#                            text: tableName#}
-{#                        }));#}
-{#                    });#}
-{#                });#}
-{#            }#}
-{#        });#}
-{#    </script>#}
     <script>
         function uploadFile() {
             // Получаем файл из input
@@ -67,7 +26,7 @@
             })
             .then(response => response.json()) //.json()) // предполагается, что сервер возвращает JSON
             .then(html => {
-            console.log(html);
+            console.log("html", html);
             fSelect = document.querySelector('#firstSelect')
             for (let key in html) {
                 const newOption = document.createElement('option')
@@ -90,29 +49,11 @@
     <button type="button" onclick="uploadFile()">Upload Excel File</button>
 </form>
 
-<div id="data-display">
-    <!-- JSON data will be displayed here -->
-</div>
-
-<div>
-    <h5>{{ message }}</h5>
-</div>
-
-<div>
-    <h5>{{ sheets }}</h5>
-</div>
-
-<select id="firstSelect">
-    {% for key, value in sheets.items %}
-        <option value="{{ value }}">{{ key }}</option>
-    {% endfor %}
-</select>
+<select id="firstSelect"></select>
 
 <button id="confirmBtn">Confirm Sheet</button>
 
-<select id="secondSelect">
-    <!-- Options will be filled dynamically based on the first selection -->
-</select>
+<select id="secondSelect"></select>
 
 
 <button id="display-table-data" type="button">Display Table Data</button>
@@ -129,7 +70,8 @@
 
         // Clear existing options in the second select
         const selctedOption = document.querySelector('#firstSelect')
-        console.log(selctedOption.value)
+        console.log("fSelect: ", fSelect);
+        console.log("selctedOption.value", selctedOption.value)
         var secondSelect = document.getElementById('secondSelect');
         secondSelect.innerHTML = '';
         const dataToUse = selctedOption.value.split(',')
@@ -143,6 +85,8 @@
         });
     });
     $('#sendButton').click(function() {
+        console.log($('#firstSelect').text());
+        console.log($('#secondSelect').val());
         $.ajax({
             url: '/storage/select_table/',
             type: 'POST',
