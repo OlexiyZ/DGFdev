@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Excel Operations</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{#    <script src="uploadFile.js"></script>#}
+{#    <script>#}
+{#        $(document).ready(function() {#}
+{#            // Load worksheets into the listbox when the page loads#}
+{#            loadWorksheets();#}
+{##}
+{#            // Event handler for when the worksheet selection changes#}
+{#            $('#worksheet-listbox').change(function() {#}
+{#                var selectedWorksheet = $(this).val();#}
+{#                loadTableNames(selectedWorksheet);#}
+{#            });#}
+{##}
+{#            // Function to load worksheet titles into the listbox#}
+{#            function loadWorksheets() {#}
+{#                // Example AJAX call to get worksheets from the server#}
+{#                $.get('', function(data) {#}
+{#                    $('#worksheet-listbox').empty();#}
+{#                    $.each(data["{{ sheet }}"] , function(i, worksheet) {#}
+{#                        $('#worksheet-listbox').append($('<option>', {#}
+{#                            value: worksheet,#}
+{#                            text: worksheet#}
+{#                        }));#}
+{#                    });#}
+{#                });#}
+{#            }#}
+{##}
+{#            // Function to load table names based on the selected worksheet#}
+{#            function loadTableNames(worksheet) {#}
+{#                // Example AJAX call to get table names from the server#}
+{#                $.get('/url-to-get-table-names/?worksheet=' + worksheet, function(data) {#}
+{#                    $('#table-names-listbox').empty();#}
+{#                    $.each(data.tableNames, function(i, tableName) {#}
+{#                        $('#table-names-listbox').append($('<option>', {#}
+{#                            value: tableName,#}
+{#                            text: tableName#}
+{#                        }));#}
+{#                    });#}
+{#                });#}
+{#            }#}
+{#        });#}
+{#    </script>#}
+    <script>
+        function uploadFile() {
+            // Получаем файл из input
+            var fileInput = document.getElementById('excelFile');
+            var file = fileInput.files[0]; // Берем первый выбранный файл
+
+            if (!file) {
+                alert("Пожалуйста, выберите файл для загрузки.");
+                return;
+            }
+
+            // Создаем FormData объект для передачи файла
+            var formData = new FormData();
+            formData.append('excelFile', file);
+
+            // Используем fetch API для отправки файла на сервер
+            fetch('/storage/upload_file/', { // Укажите здесь URL вашего серверного скрипта для обработки загрузки '/upload-path'
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json()) //.json()) // предполагается, что сервер возвращает JSON
+            .then(html => {
+            console.log(html);
+            fSelect = document.querySelector('#firstSelect')
+            for (let key in html) {
+                const newOption = document.createElement('option')
+                newOption.textContent = key
+                newOption.value = html[key]
+                fSelect.appendChild(newOption)
+            }
+            })
+        }
+    </script>
+
+</head>
+<body id="content">
+
+<h2>Excel Operations</h2>
+
+<form id="uploadForm" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <input type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls" required>
+    <button type="button" onclick="uploadFile()">Upload Excel File</button>
+</form>
+
+<div id="data-display">
+    <!-- JSON data will be displayed here -->
+</div>
+
+<div>
+    <h5>{{ message }}</h5>
+</div>
+
+<div>
+    <h5>{{ sheets }}</h5>
+</div>
+
+<select id="firstSelect">
+    {% for key, value in sheets.items %}
+        <option value="{{ value }}">{{ key }}</option>
+    {% endfor %}
+</select>
+
+<button id="confirmBtn">Confirm Sheet</button>
+
+<select id="secondSelect">
+    <!-- Options will be filled dynamically based on the first selection -->
+</select>
+
+
+<button id="display-table-data" type="button">Display Table Data</button>
+
+<!-- Button to Load Excel Data to Database -->
+<!-- <form method="post" action="/url-to-load-data/"> -->
+    {% csrf_token %}
+    <button id="sendButton" type="submit">Load Excel Data to Database</button>
+<!-- </form> -->
+<script>
+    console.log(1)
+    document.getElementById('confirmBtn').addEventListener('click', function() {
+        // Get the selected value from the first select
+
+        // Clear existing options in the second select
+        const selctedOption = document.querySelector('#firstSelect')
+        console.log(selctedOption.value)
+        var secondSelect = document.getElementById('secondSelect');
+        secondSelect.innerHTML = '';
+        const dataToUse = selctedOption.value.split(',')
+        // Fill the second select with new options
+        dataToUse.forEach(function(item) {
+            var opt = document.createElement('option');
+            console.log(opt);
+            opt.value = item;
+            opt.innerHTML = item;
+            secondSelect.appendChild(opt);
+        });
+    });
+    $('#sendButton').click(function() {
+        $.ajax({
+            url: '/storage/select_table/',
+            type: 'POST',
+            data: {
+                'sheet': $('#firstSelect').text(),
+                'table': $('#secondSelect').val(),
+                'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()
+            }
+        })
+    })
+</script>
+</body>
+</html>
