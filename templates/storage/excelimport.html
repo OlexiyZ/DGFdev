@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Excel Operations</title>
+    <title>Import from Excel</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         function uploadFile() {
@@ -26,12 +26,15 @@
             })
             .then(response => response.json()) //.json()) // предполагается, что сервер возвращает JSON
             .then(html => {
-            console.log("html", html);
+            document.querySelector('#firstSelect').innerHTML = '';
             fSelect = document.querySelector('#firstSelect')
+            shtml = html
+            console.log("html", html)
             for (let key in html) {
                 const newOption = document.createElement('option')
                 newOption.textContent = key
-                newOption.value = html[key]
+                newOption.value = key
+                {#newOption.value = html[key]#}
                 fSelect.appendChild(newOption)
             }
             })
@@ -41,7 +44,7 @@
 </head>
 <body id="content">
 
-<h2>Excel Operations</h2>
+<h2>Import from Excel to Database</h2>
 
 <form id="uploadForm" enctype="multipart/form-data" method="post">
     {% csrf_token %}
@@ -56,12 +59,12 @@
 <select id="secondSelect"></select>
 
 
-<button id="display-table-data" type="button">Display Table Data</button>
+{#<button id="display-table-data" type="button">Display Table Data</button>#}
 
 <!-- Button to Load Excel Data to Database -->
 <!-- <form method="post" action="/url-to-load-data/"> -->
     {% csrf_token %}
-    <button id="sendButton" type="submit">Load Excel Data to Database</button>
+    <button id="sendButton" type="submit">Import Table to CSV</button>
 <!-- </form> -->
 <script>
     console.log(1)
@@ -72,31 +75,37 @@
         const selctedOption = document.querySelector('#firstSelect')
         console.log("fSelect: ", fSelect);
         console.log("selctedOption.value", selctedOption.value)
+        console.log("html: ", shtml[selctedOption.value]);
         var secondSelect = document.getElementById('secondSelect');
         secondSelect.innerHTML = '';
-        const dataToUse = selctedOption.value.split(',')
+        {#const dataToUse = selctedOption.value.split(',')#}
+        {#const dataToUse = shtml[selctedOption.value].split(',')#}
+        const dataToUse = shtml[selctedOption.value]
+        console.log("dataToUse: ", dataToUse);
         // Fill the second select with new options
         dataToUse.forEach(function(item) {
             var opt = document.createElement('option');
-            console.log(opt);
+            console.log("opr", opt);
+            {#console.log("html", html);#}
             opt.value = item;
             opt.innerHTML = item;
             secondSelect.appendChild(opt);
         });
     });
     $('#sendButton').click(function() {
-        console.log($('#firstSelect').text());
-        console.log($('#secondSelect').val());
+        console.log("firstSelect: ", $('#firstSelect').val());
+        console.log("secondSelect: ", $('#secondSelect').val());
         $.ajax({
             url: '/storage/select_table/',
             type: 'POST',
             data: {
-                'sheet': $('#firstSelect').text(),
+                'sheet': $('#firstSelect').val(),
                 'table': $('#secondSelect').val(),
                 'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()
             }
         })
     })
 </script>
+
 </body>
 </html>

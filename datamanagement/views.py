@@ -1,44 +1,47 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from openpyxl import load_workbook
-import json
+# from .models import *
+from storage.models import *
 
 
-# Create your views here.
-@csrf_exempt
-@require_POST
-def upload_file_(request):
-    file = request.FILES.get('excelFile')
-    if not file:
-        return JsonResponse({'error': 'Нет файла для загрузки'}, status=400)
+def main(request):
+    return render(request, 'datamanagement/main.html')
 
-    # Здесь вы можете обрабатывать файл, например, сохранять его на сервере
-    context = {'message': 'Файл успешно загружен'}
-    wb = load_workbook(file)
+def fields(request):
+    all_fields = Field.objects.all()
+    all_field_lists = FieldList.objects.all()
+    context = {
+        'fields': all_fields,
+        'field_lists': all_field_lists
+    }
+    return render(request, 'datamanagement/fields.html', context)
 
-    sheets = dict()
-    # Adding items to Listbox
-    for sheet_item in wb.worksheets:
-        tables = []
-        sheet_title = sheet_item.title
-        # sheets.append(sheet_title)
-        selected_sheet = wb[sheet_title]
-        for table_item in selected_sheet.tables:
-            tables.append(table_item)
-        sheets[sheet_title] = tables
 
-    # Define the filename
-    file_name = file.name.split('.', -1)[:-1]  # 'data.json'
-    i = 0
-    filename = ''
-    for part in file_name:
-        filename = filename + part + '.'
+def field_list_item(request, fields_list_name):
+    field_list = FieldList.objects.get(field_list_name=fields_list_name)
+    filtered_fields = Field.objects.filter(field_list=field_list)
+    all_field_lists = FieldList.objects.all()
+    context = {
+        'fields': filtered_fields,
+        'field_lists': all_field_lists,
+        'current_field_list': field_list
+    }
+    return render(request, 'datamanagement/fields.html', context)
 
-    # Open the file in write mode ('w') and write the JSON data
-    with open(filename + 'json', 'w') as f:
-        json.dump(sheets, f, indent=4)
 
-    # return JsonResponse({'message': f'Файл {file.name} успешно загружен'})
-    return render(request, 'storage/excelimport.html', context)
+def field_lists(request):
+    all_field_lists = FieldList.objects.all()
+    context = {
+        'field_lists': all_field_lists
+    }
+    return render(request, 'datamanagement/field_lists.html', context)
+
+
+def queries(request):
+    all_queries = Query.objects.all()
+    context = {
+        'queries': all_queries
+    }
+    return render(request, 'datamanagement/queries.html', context)
+
