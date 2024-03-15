@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,29 +7,7 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="../queries/">Queries</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="../field_lists/">Field Lists</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Source Lists</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="../fields/">Fields</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    {{ nav_bar|safe }}
 </header>
 
     <main>
@@ -49,8 +27,8 @@
                 {% for query in queries %}
                     <tr>
                         <td>{{ query.query_name }}</td>
-                        <td>{{ query.field_list }}</td>
-                        <td>{{ query.source_list }}</td>
+                        <td><a href="/datamanagement/fields/{{ query.field_list }}/">{{ query.field_list }}</a></td>
+                        <td><a href="/datamanagement/sources/{{ query.source_list }}/">{{ query.source_list }}</a></td>
                         <td>{{ query.query_conditions }}</td>
                         <td>{{ query.query_alias }}</td>
                         <td>{{ query.query_description }}</td>

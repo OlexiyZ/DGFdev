@@ -16,18 +16,17 @@
             <table id="fieldListsTable" class="table table-sm table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>data_source</th>
-                        <th>field_list_name</th>
-                        <th>field_list_description</th>
+                        <th>source_list_name</th>
+                        <th>source_list_description</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for field_list in field_lists %}
+                {% for source_list in source_lists %}
                     <tr>
 {#                        <td><a href="">{{ field_list.data_source }}</a></td>#}
-                        <td>{{ field_list.data_source }}</td>
-                        <td><a href="/datamanagement/fields/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></td>
-                        <td>{{ field_list.field_list_description }}</td>
+{#                        <td>{{ field_list.data_source }}</td>#}
+                        <td><a href="/datamanagement/sources/{{ source_list.source_list_name }}/">{{ source_list.source_list_name }}</a></td>
+                        <td>{{ source_list.source_list_description }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
