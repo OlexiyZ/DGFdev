@@ -13,19 +13,19 @@ nav_bar = '''
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/datamanagement/queries/">Queries</a>
+              <a class="nav-link active" aria-current="page" href="/dm/queries/">Queries</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/datamanagement/field_lists/">Field Lists</a>
+                <a class="nav-link active" aria-current="page" href="/dm/field_lists/">Field Lists</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/datamanagement/fields/">Fields</a>
+                <a class="nav-link active" aria-current="page" href="/dm/fields/">Fields</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/datamanagement/source_lists/">Source Lists</a>
+                <a class="nav-link active" aria-current="page" href="/dm/source_lists/">Source Lists</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/datamanagement/sources/">Sources</a>
+                <a class="nav-link active" aria-current="page" href="/dm/sources/">Sources</a>
             </li>
           </ul>
         </div>
@@ -38,7 +38,7 @@ def main(request):
     context = {
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/main.html', context)
+    return render(request, 'dm/main.html', context)
 
 
 def fields(request):
@@ -49,7 +49,7 @@ def fields(request):
         'field_lists': all_field_lists,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/fields.html', context)
+    return render(request, 'dm/fields.html', context)
 
 
 def field_list_item(request, fields_list_name):
@@ -62,7 +62,7 @@ def field_list_item(request, fields_list_name):
         'current_field_list': field_list,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/fields.html', context)
+    return render(request, 'dm/fields.html', context)
 
 
 def field_lists(request):
@@ -71,7 +71,7 @@ def field_lists(request):
         'field_lists': all_field_lists,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/field_lists.html', context)
+    return render(request, 'dm/field_lists.html', context)
 
 
 def queries(request):
@@ -80,7 +80,7 @@ def queries(request):
         'queries': all_queries,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/queries.html', context)
+    return render(request, 'dm/queries.html', context)
 
 
 def source_lists(request):
@@ -89,7 +89,7 @@ def source_lists(request):
         'source_lists': all_source_lists,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/source_lists.html', context)
+    return render(request, 'dm/source_lists.html', context)
 
 
 def sources(request):
@@ -100,7 +100,7 @@ def sources(request):
         'source_lists': all_source_lists,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/sources.html', context)
+    return render(request, 'dm/sources.html', context)
 
 
 def source_list_item(request, source_list_name):
@@ -113,8 +113,8 @@ def source_list_item(request, source_list_name):
         'current_source_list': source_list,
         'nav_bar': nav_bar
     }
-    return render(request, 'datamanagement/sources.html', context)
+    return render(request, 'dm/sources.html', context)
 
 
 def test_static(request):
-    return render(request, 'datamanagement/test_static.html')
+    return render(request, 'dm/test_static.html')
