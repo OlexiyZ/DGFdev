@@ -78,17 +78,6 @@ def field_lists(request):
     return render(request, 'dm/field_lists.html', context)
 
 
-# def field_list(request, field_list_name):
-#     field_list = get_object_or_404(FieldList, field_list_name=field_list_name)
-#     form = FieldListDisplayForm(instance=field_list)
-#     context = {
-#         'form': form,
-#         'nav_bar': nav_bar,
-#         'bootstrap_link': bootstrap_link
-#     }
-#     return render(request, 'dm/field_list.html', context)
-
-
 def field_list(request, field_list_name):
     if field_list_name:
         fieldlist = get_object_or_404(FieldList, field_list_name=field_list_name)
@@ -103,7 +92,7 @@ def field_list(request, field_list_name):
     context = {
         'form': form,
         'edit': False,
-        'add': True,
+        # 'add': True,
         'nav_bar': nav_bar,
         'bootstrap_link': bootstrap_link
     }
@@ -112,8 +101,6 @@ def field_list(request, field_list_name):
 
 def field_list_edit(request, field_list_name):
     context = {
-        # 'form': form,
-        # 'edit': True,
         'nav_bar': nav_bar,
         'bootstrap_link': bootstrap_link
     }
@@ -121,6 +108,7 @@ def field_list_edit(request, field_list_name):
     if field_list_name != 'new':
         fieldlist = get_object_or_404(FieldList, field_list_name=field_list_name)
         context['edit'] = True
+        context['add'] = False
     else:
         fieldlist = None
         context['edit'] = True
@@ -134,14 +122,7 @@ def field_list_edit(request, field_list_name):
     else:
         form = FieldListForm(instance=fieldlist)
 
-    # context = {
-    #     'form': form,
-    #     # 'edit': True,
-    #     'nav_bar': nav_bar,
-    #     'bootstrap_link': bootstrap_link
-    # }
     context['form'] = form
-
     return render(request, 'dm/field_list.html', context)
 
 
@@ -198,10 +179,18 @@ def source_list(request, source_list_name):
 
 
 def source_list_edit(request, source_list_name):
+    context = {
+        'nav_bar': nav_bar,
+        'bootstrap_link': bootstrap_link
+    }
     if source_list_name != 'new':
         sourcelist = get_object_or_404(SourceList, source_list_name=source_list_name)
+        context['edit'] = True
+        context['add'] = False
     else:
         sourcelist = None
+        context['edit'] = True
+        context['add'] = True
 
     if request.method == 'POST':
         form = SourceListForm(request.POST, instance=sourcelist)
@@ -211,12 +200,7 @@ def source_list_edit(request, source_list_name):
     else:
         form = SourceListForm(instance=sourcelist)
 
-    context = {
-        'form': form,
-        'edit': True,
-        'nav_bar': nav_bar,
-        'bootstrap_link': bootstrap_link
-    }
+    context['form'] = form
     return render(request, 'dm/source_list.html', context)
 
 

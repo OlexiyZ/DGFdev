@@ -10,7 +10,11 @@
     {{ nav_bar|safe }}
 </header>
     {% if edit %}
-        <h4>Field List edit</h4>
+        {% if add %}
+            <h4>Field List add</h4>
+        {% else %}
+            <h4>Field List edit</h4>
+        {% endif %}
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
