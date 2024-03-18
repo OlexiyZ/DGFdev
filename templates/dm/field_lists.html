@@ -10,8 +10,9 @@
 </header>
 
 <body>
-    <nav></nav>
+
     <main>
+    <a href="/dm/field_list_edit/new/">Add new Source List</a>
         <div>
             <table id="fieldListsTable" class="table table-sm table-striped table-hover">
                 <thead>
@@ -25,9 +26,13 @@
                 {% for field_list in field_lists %}
                     <tr>
 {#                        <td><a href="">{{ field_list.data_source }}</a></td>#}
-                        <td>{{ field_list.data_source }}</td>
-                        <td><a href="/datamanagement/fields/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></td>
+                        <td><a href="/dm/sources/{{ field_list.data_source }}/">{{ field_list.data_source }}</td>
+                        <td><a href="/dm/fields/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></td>
                         <td>{{ field_list.field_list_description }}</td>
+                        <td>
+                            <a href="/dm/field_list/{{ field_list.field_list_name }}/">View</a>
+                            <a href="/dm/field_list_edit/{{ field_list.field_list_name }}/">Edit</a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

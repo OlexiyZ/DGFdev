@@ -27,8 +27,8 @@
                       </a>
                       <ul class="dropdown-menu">
                           {% for field_list in field_lists %}
-                          <li><a class="dropdown-item" href="/datamanagement/fields/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>
-{#                          <li><a class="dropdown-item" href="/datamanagement/fields/field_list/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>#}
+                          <li><a class="dropdown-item" href="/dm/fields/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>
+{#                          <li><a class="dropdown-item" href="/dm/fields/field_list/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>#}
                           {% endfor %}
                       </ul>
                     </li>
@@ -61,7 +61,14 @@
                     <tr>
                         <td>{{ field.field_alias }}</td>
                         <td>{{ field.field_source_type }}</td>
-                        <td>{{ field.field_source }}</td>
+{#                        <td>{{ field.field_source }}</td>#}
+                        <td>
+                            {% if field.field_source != None %}
+                                <a href="/dm/sources/{{ current_field_list.data_source.source_list_name }}.{{ field.field_source }}/">{{ field.field_source }}</a>
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
                         <td>{{ field.field_name }}</td>
                         <td>{{ field.field_value }}</td>
                         <td>{{ field.field_function }}</td>

@@ -27,8 +27,8 @@
                       </a>
                       <ul class="dropdown-menu">
                           {% for source_list in source_lists %}
-                          <li><a class="dropdown-item" href="/datamanagement/sources/{{ source_list.source_list_name }}/">{{ source_list.source_list_name }}</a></li>
-{#                          <li><a class="dropdown-item" href="/datamanagement/fields/field_list/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>    #}
+                          <li><a class="dropdown-item" href="/dm/sources/{{ source_list.source_list_name }}/">{{ source_list.source_list_name }}</a></li>
+{#                          <li><a class="dropdown-item" href="/dm/fields/field_list/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>    #}
                           {% endfor %}
                       </ul>
                     </li>
@@ -65,7 +65,13 @@
                         <td>{{ source.source_alias }}</td>
                         <td>{{ source.source_type }}</td>
                         <td>{{ source.query_name }}</td>
-                        <td>{{ source.source_list_name }}</td>
+                        <td>
+                            {% if source.source_list_name != None %}
+                                <a href="/dm/sources/{{ source.source_list_name }}/">{{ source.source_list_name }}</a>
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
                         <td>{{ source.table_name }}</td>
                         <td>{{ source.source_system }}</td>
                         <td>{{ source.source_scheme }}</td>

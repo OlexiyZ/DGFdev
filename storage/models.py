@@ -59,13 +59,6 @@ class Source(models.Model):
     union_condition = models.TextField(max_length=255, null=True, blank=True)
     source_description = models.TextField(blank=True, null=True)
 
-    # class Meta:
-    #     unique_together = ('source_union_list_name', 'source_alias')  # Deprecated in newer Django versions
-    #     # Or for newer versions, use:
-    #     constraints = [
-    #         models.UniqueConstraint(fields=['source_union_list_name', 'source_alias'], name='unique_source')
-    #     ]
-
     def __str__(self):
         return self.source_alias
 
