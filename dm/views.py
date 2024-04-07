@@ -160,6 +160,7 @@ def source_lists(request):
 
 def source_list(request, source_list_name):
     if source_list_name:
+        # sourcelist = get_object_or_404(Source, source_alias=source_list_name)
         sourcelist = get_object_or_404(SourceList, source_list_name=source_list_name)
     else:
         sourcelist = None
@@ -215,9 +216,30 @@ def sources(request):
     return render(request, 'dm/sources.html', context)
 
 
-def source_list_item(request, source_list_name):
+# def source_list_item(request, source_list_name, type):
+#     source_list = Source.objects.get(source_alias=source_list_name)
+#     if type == 'union':
+#         filtered_sources = Source.objects.filter(source_union_list_name=source_list)
+#     else:
+#         filtered_sources = Source.objects.filter(source_alias=source_list)
+#         # filtered_sources = Source.objects.filter(source_list_name=source_list)
+#     all_source_lists = SourceList.objects.all()
+#     context = {
+#         'sources': filtered_sources,
+#         'source_lists': all_source_lists,
+#         'current_source_list': source_list,
+#         'nav_bar': nav_bar
+#     }
+#     return render(request, 'dm/sources.html', context)
+
+
+def source_list_item(request, source_list_name, type):
     source_list = SourceList.objects.get(source_list_name=source_list_name)
-    filtered_sources = Source.objects.filter(source_union_list_name=source_list)
+    if type == 'union':
+        filtered_sources = Source.objects.filter(source_union_list_name=source_list)
+    else:
+        filtered_sources = Source.objects.filter(source_alias=source_list)
+        # filtered_sources = Source.objects.filter(source_list_name=source_list)
     all_source_lists = SourceList.objects.all()
     context = {
         'sources': filtered_sources,

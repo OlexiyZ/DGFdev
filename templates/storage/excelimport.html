@@ -40,6 +40,20 @@
             })
         }
     </script>
+    {% comment %}
+    <script>
+    document.getElementById('load_csv').addEventListener('submit', function() {
+        console.log("Send CSV");
+        // Get the selected value of the first select and assign it to the hidden input
+        var firstSelectValue = document.getElementById('firstSelect').value;
+        document.getElementById('firstSelectValue').value = firstSelectValue;
+
+        // Get the selected value of the second select and assign it to the hidden input
+        var secondSelectValue = document.getElementById('secondSelect').value;
+        document.getElementById('secondSelectValue').value = secondSelectValue;
+    });
+    </script>
+    {% endcomment %}
 
 </head>
 <body id="content">
@@ -62,10 +76,8 @@
 {#<button id="display-table-data" type="button">Display Table Data</button>#}
 
 <!-- Button to Load Excel Data to Database -->
-<!-- <form method="post" action="/url-to-load-data/"> -->
-    {% csrf_token %}
-    <button id="sendButton" type="submit">Import Table to CSV</button>
-<!-- </form> -->
+<button id="sendButton" type="submit">Import Table to CSV</button>
+
 <script>
     console.log(1)
     document.getElementById('confirmBtn').addEventListener('click', function() {
@@ -95,8 +107,17 @@
     $('#sendButton').click(function() {
         console.log("firstSelect: ", $('#firstSelect').val());
         console.log("secondSelect: ", $('#secondSelect').val());
+        {% comment %}
+        // Get the selected value of the first select and assign it to the hidden input
+        var firstSelectValue = $('#firstSelect').val();
+        document.getElementById('firstSelectValue').value = firstSelectValue;
+
+        // Get the selected value of the second select and assign it to the hidden input
+        var secondSelectValue = $('#secondSelect').val();
+        document.getElementById('secondSelectValue').value = secondSelectValue;
+        {% endcomment %}
         $.ajax({
-            url: '/storage/select_table/',
+            url: '/storage/import_csv/',
             type: 'POST',
             data: {
                 'sheet': $('#firstSelect').val(),
@@ -104,6 +125,8 @@
                 'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()
             }
         })
+        .then(response => response.json())
+        .then(html => {})
     })
 </script>
 

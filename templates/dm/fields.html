@@ -39,7 +39,7 @@
     <hr />
     {% if current_field_list %}
         <p>Field List: {{ current_field_list.field_list_name }}</p>
-        <p>Data Source: {{ current_field_list.data_source.source_list_name }}</p>
+        <p>Data Source: <a href="/dm/sources/{{ current_field_list.data_source.source_list_name }}/union/">{{ current_field_list.data_source.source_list_name }}</a></p>
     {% endif %}
     <main>
         <div>
@@ -64,7 +64,8 @@
 {#                        <td>{{ field.field_source }}</td>#}
                         <td>
                             {% if field.field_source != None %}
-                                <a href="/dm/sources/{{ current_field_list.data_source.source_list_name }}.{{ field.field_source }}/">{{ field.field_source }}</a>
+                                <a href="/dm/sources/{{ field.field_source }}/item/">{{ field.field_source }}</a>
+{#                                <a href="/dm/sources/{{ current_field_list.data_source.source_list_name }}.{{ field.field_source }}/">{{ field.field_source }}</a>#}
                             {% else %}
                                 None
                             {% endif %}

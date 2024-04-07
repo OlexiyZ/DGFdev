@@ -14,7 +14,7 @@ urlpatterns = [
     path("field_list/new/", field_list_edit),
 
     path("sources/", sources),
-    path("sources/<str:source_list_name>/", source_list_item),
+    path("sources/<str:source_list_name>/<str:type>/", source_list_item),
 
     path("source_lists/", source_lists),
     path("source_list/<str:source_list_name>/", source_list),

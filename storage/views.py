@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -6,6 +6,8 @@ from openpyxl import load_workbook
 import json
 import pandas as pd
 import psycopg2
+from django.core.files.storage import FileSystemStorage
+import os
 from .models import *
 
 wb = None
@@ -54,6 +56,7 @@ def upload_file(request):
 
 def select_table(request):
     global wb
+    print('wb type: ', type(wb))
     if request.method == 'POST':
         sheet_name = request.POST.get('sheet')
         table_name = request.POST.get('table')
@@ -167,17 +170,57 @@ def load2db(self, df):
         connection.close()
 
 
-def fields(request):
-    all_fields = Field.objects.all()
-    context = {
-        'fields': all_fields,
-    }
-    return render(request, 'storage/fields.html', context)
+def import_csv(request):
+    print("Request data: ", request.body)
+    context = {'text': 'CSV Loaded'}
+    return JsonResponse(context)
+    # render(request, 'storage/import_csv.html', context)
 
 
-def field_lists(request):
-    all_field_lists = FieldList.objects.all()
-    context = {
-        'field_lists': all_field_lists
-    }
-    return render(request, 'storage/field_lists.html', context)
+def import_excel(request):
+    if request.method == 'POST' and request.FILES['excelFile']:
+        upload = request.FILES['excelFile']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
+        context = {'message': 'File uploaded successfully'}
+        file_path = os.path.join('media/', file)
+        wb = load_workbook(file_path)
+
+        sheets = dict()
+        # Adding items to Listbox
+        for sheet_item in wb.worksheets:
+            tables = []
+            sheet_title = sheet_item.title
+            # sheets.append(sheet_title)
+            selected_sheet = wb[sheet_title]
+            for table_item in selected_sheet.tables:
+                tables.append(table_item)
+            sheets[sheet_title] = tables
+
+        context['file_url'] = file_url
+        context['sheets'] = sheets.keys()
+        return render(request, 'storage/import_excel.html', context)
+    elif request.method == 'POST' and request.body('firstSelect'):
+        context = {'message': 'secondSelect'}
+        return render(request, 'storage/import_excel.html', context)
+    return render(request, 'storage/import_excel.html')
+
+
+# def first_select(request):
+
+
+# def fields(request):
+#     all_fields = Field.objects.all()
+#     context = {
+#         'fields': all_fields,
+#     }
+#     return render(request, 'storage/fields.html', context)
+#
+#
+# def field_lists(request):
+#     all_field_lists = FieldList.objects.all()
+#     context = {
+#         'field_lists': all_field_lists
+#     }
+#     return render(request, 'storage/field_lists.html', context)

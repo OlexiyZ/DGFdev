@@ -104,7 +104,7 @@ class Query(models.Model):
     query_name = models.CharField(max_length=10)
     field_list = models.ForeignKey(FieldList, on_delete=models.CASCADE, blank=True, null=True)
     source_list = models.ForeignKey(SourceList, on_delete=models.CASCADE, blank=True, null=True)
-    query_conditions = models.TextField(max_length=255, blank=True, null=True)
+    query_conditions = models.TextField(blank=True, null=True)
     query_alias = models.CharField(max_length=30, blank=True, null=True)
     query_description = models.TextField(blank=True, null=True)
 

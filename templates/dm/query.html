@@ -9,72 +9,35 @@
 <header>
     {{ nav_bar|safe }}
 </header>
-{% comment %}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          {% if current_field_list.field_list_name %}
-                            {{ current_field_list.field_list_name }}
-                          {% else %}
-                            Query List
-                          {% endif %}
-                      </a>
-                      <ul class="dropdown-menu">
-                          {% for field_list in field_lists %}
-                          <li><a class="dropdown-item" href="/dm/fields/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>
-{#                          <li><a class="dropdown-item" href="/dm/fields/field_list/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>#}
-                          {% endfor %}
-                      </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endcomment %}
-<h5>query_name</h5>
-<p>{{ query.query_name }}</p>
-<h5>field_list</h5>
-<p><a href="/dm/fields/{{ query.field_list }}/">{{ query.field_list }}</a></p>
-<h5>source_list</h5>
-<p><a href="/dm/sources/{{ query.source_list }}/">{{ query.source_list }}</a></p>
-<h5>query_conditions</h5>
-<p>{{ query.query_conditions }}</p>
-<h5>query_alias</h5>
-<p>{{ query.query_alias }}</p>
-<h5>query_description</h5>
-<p>{{ query.query_description }}</p>
-
-{% comment %}
+<h5>Query details</h5>
             <table id="queryTable" class="table table-sm table-striped table-hover">
-                <thead>
+                <tbody class="table-group-divider">
                     <tr>
                         <th>query_name</th>
-                        <th>field_list</th>
-                        <th>source_list</th>
-                        <th>query_conditions</th>
-                        <th>query_alias</th>
-                        <th>query_description</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-{#                {% for query in queries %}#}
-                    <tr>
                         <td>{{ query.query_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>field_list</th>
                         <td><a href="/dm/fields/{{ query.field_list }}/">{{ query.field_list }}</a></td>
-                        <td><a href="/dm/sources/{{ query.source_list }}/">{{ query.source_list }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>source_list</th>
+                        <td><a href="/dm/sources/{{ query.source_list }}/union/">{{ query.source_list }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>query_conditions</th>
                         <td>{{ query.query_conditions }}</td>
+                    </tr>
+                    <tr>
+                        <th>query_alias</th>
                         <td>{{ query.query_alias }}</td>
+                    </tr>
+                    <tr>
+                        <th>query_description</th>
                         <td>{{ query.query_description }}</td>
                     </tr>
-{#                {% endfor %}#}
                 </tbody>
             </table>
-{% endcomment %}
+
 </body>
 </html>
