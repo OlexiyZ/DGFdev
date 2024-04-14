@@ -64,7 +64,13 @@
                         <td><a href="/dm/sources/{{ source.source_union_list_name }}/union/">{{ source.source_union_list_name }}</a></td>
                         <td><a href="/dm/sources/{{ source.source_alias }}/item/">{{ source.source_alias }}</a></td>
                         <td>{{ source.source_type }}</td>
-                        <td>{{ source.query_name }}</td>
+                        <td>
+                            {% if source.query_name != None %}
+                            <a href="/dm/query/{{ source.query_name }}/">{{ source.query_name }}</a>
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
                         <td>
                             {% if source.source_list_name != None %}
                                 <a href="/dm/sources/{{ source.source_list_name }}/union/">{{ source.source_list_name }}</a>
