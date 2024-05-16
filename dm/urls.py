@@ -7,6 +7,7 @@ urlpatterns = [
 
     path("fields/", fields),
     path("fields/<str:fields_list_name>/", field_list_item),
+    path("fields/<str:field_source_name>/<str:field_name>/", field_item),
 
     path("field_lists/", field_lists),
     path("field_list/<str:field_list_name>/", field_list),

@@ -69,6 +69,24 @@ def field_list_item(request, fields_list_name):
     return render(request, 'dm/fields.html', context)
 
 
+def field_item(request, field_source_name, field_name):
+    if field_source_name and field_name:
+        field_source = Source.objects.get(source_alias=field_source_name)
+        field = get_object_or_404(Field, field_source=field_source, field_name=field_name)
+    else:
+        field = None
+
+    context = {
+        'fields': (field,),
+        'field': field,
+        'field_source': field_source,
+        'field_lists': None,
+        'current_field_list': None,
+        'nav_bar': nav_bar,
+        'bootstrap_link': bootstrap_link
+    }
+    return render(request, 'dm/fields.html', context)
+
 def field_lists(request):
     all_field_lists = FieldList.objects.all()
     context = {

@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import UniqueConstraint
 
+
 # from django.core.exceptions import ValidationError
 
 # Create your models here.
@@ -46,12 +47,12 @@ class Source(models.Model):
     )
 
     source_union_list_name = models.ForeignKey(SourceList, on_delete=models.CASCADE,
-                                         related_name='source_list_names')
+                                               related_name='source_list_names')
     source_alias = models.CharField(max_length=30)
     source_type = models.CharField(max_length=30, choices=SOURCE_TYPES, default='tbd')
     query_name = models.ForeignKey("Query", on_delete=models.SET_NULL, null=True, blank=True)
     source_list_name = models.ForeignKey(SourceList, on_delete=models.SET_NULL, null=True, blank=True,
-                                    related_name='source_names')
+                                         related_name='source_names')
     table_name = models.CharField(max_length=30, blank=True, null=True)
     source_system = models.ForeignKey(SourceSystem, on_delete=models.SET_NULL, null=True, blank=True)
     source_scheme = models.ForeignKey(SourceScheme, on_delete=models.SET_NULL, null=True, blank=True)
@@ -85,7 +86,7 @@ class Field(models.Model):
     field_alias = models.CharField(max_length=30)
     field_source_type = models.CharField(max_length=30, choices=FIELD_SOURCE_TYPES, default='tbd')
     field_source = models.ForeignKey(Source, on_delete=models.CASCADE, blank=True, null=True)
-    field_name = models.CharField(max_length=30)
+    field_name = models.CharField(max_length=30, blank=True)
     field_value = models.CharField(max_length=30, blank=True)
     field_function = models.TextField(max_length=255, blank=True)
     function_field_list = models.CharField(max_length=255, blank=True)
@@ -111,3 +112,11 @@ class Query(models.Model):
     def __str__(self):
         return self.query_name
 
+
+class Report(models.Model):
+    report_name = models.CharField(max_length=30)
+    field_list = models.ForeignKey(FieldList, on_delete=models.CASCADE, blank=True, null=True)
+    source_list = models.ForeignKey(SourceList, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.report_name
