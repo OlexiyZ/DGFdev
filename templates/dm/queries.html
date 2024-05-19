@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th>query_name</th>
+                        <th>diagram</th>
                         <th>field_list</th>
                         <th>source_list</th>
                         <th>query_conditions</th>
@@ -27,6 +28,7 @@
                 {% for query in queries %}
                     <tr>
                         <td><a href="/dm/query/{{ query.query_name }}/">{{ query.query_name }}</a></td>
+                        <td><a href="/dm/diagram/query/{{ query.query_name }}/"  target="_blank">diagram</a></td>
                         <td><a href="/dm/fields/{{ query.field_list }}/">{{ query.field_list }}</a></td>
                         <td><a href="/dm/sources/{{ query.source_list }}/union/">{{ query.source_list }}</a></td>
                         <td>{{ query.query_conditions }}</td>

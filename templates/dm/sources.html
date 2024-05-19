@@ -27,7 +27,7 @@
                       </a>
                       <ul class="dropdown-menu">
                           {% for source_list in source_lists %}
-                          <li><a class="dropdown-item" href="/dm/sources/{{ source_list.source_list_name }}/union/">{{ source_list.source_list_name }}</a></li>
+                          <li><a class="dropdown-item" href="/dm/sources/{{ source_list.source_list }}/union/">{{ source_list.source_list }}</a></li>
 {#                          <li><a class="dropdown-item" href="/dm/fields/field_list/{{ field_list.field_list_name }}/">{{ field_list.field_list_name }}</a></li>    #}
                           {% endfor %}
                       </ul>
@@ -38,18 +38,18 @@
     </nav>
     <hr />
     {% if current_source_list %}
-        <p>Data Source: {{ current_source_list.source_list_name }}</p>
+        <p>Data Source: {{ current_source_list.source_list }}</p>
     {% endif %}
     <main>
         <div>
             <table id="fieldsTable" class="table table-sm table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>source_union_list_name</th>
+                        <th>source_union_list</th>
                         <th>source_alias</th>
                         <th>source_type</th>
                         <th>query_name</th>
-                        <th>source_list_name</th>
+                        <th>source_list</th>
                         <th>table_name</th>
                         <th>source_system</th>
                         <th>source_scheme</th>
@@ -61,7 +61,7 @@
                 <tbody class="table-group-divider">
                 {% for source in sources %}
                     <tr>
-                        <td><a href="/dm/sources/{{ source.source_union_list_name }}/union/">{{ source.source_union_list_name }}</a></td>
+                        <td><a href="/dm/sources/{{ source.source_union_list }}/union/">{{ source.source_union_list }}</a></td>
                         <td><a href="/dm/sources/{{ source.source_alias }}/item/">{{ source.source_alias }}</a></td>
                         <td>{{ source.source_type }}</td>
                         <td>
@@ -72,8 +72,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if source.source_list_name != None %}
-                                <a href="/dm/sources/{{ source.source_list_name }}/union/">{{ source.source_list_name }}</a>
+                            {% if source.source_list != None %}
+                                <a href="/dm/sources/{{ source.source_list }}/union/">{{ source.source_list }}</a>
                             {% else %}
                                 None
                             {% endif %}

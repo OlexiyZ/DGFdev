@@ -5,9 +5,9 @@ from storage.models import *
 class SourceListForm(forms.ModelForm):
     class Meta:
         model = SourceList
-        fields = ['source_list_name', 'source_list_description']
+        fields = ['source_list', 'source_list_description']
         widgets = {
-            'source_list_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'source_list': forms.TextInput(attrs={'class': 'form-control'}),
             'source_list_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 

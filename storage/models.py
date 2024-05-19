@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
-from django.contrib.contenttypes.fields import GenericForeignKey
+# from django.contrib.postgres.fields import ArrayField
+# from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import UniqueConstraint
 
@@ -31,11 +31,11 @@ class SourceScheme(models.Model):
 
 
 class SourceList(models.Model):
-    source_list_name = models.CharField(max_length=30)
+    source_list = models.CharField(max_length=30)
     source_list_description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.source_list_name
+        return self.source_list
 
 
 class Source(models.Model):
@@ -46,12 +46,12 @@ class Source(models.Model):
         ('query', 'Query'),
     )
 
-    source_union_list_name = models.ForeignKey(SourceList, on_delete=models.CASCADE,
+    source_union_list = models.ForeignKey(SourceList, on_delete=models.CASCADE,
                                                related_name='source_list_names')
     source_alias = models.CharField(max_length=30)
     source_type = models.CharField(max_length=30, choices=SOURCE_TYPES, default='tbd')
     query_name = models.ForeignKey("Query", on_delete=models.SET_NULL, null=True, blank=True)
-    source_list_name = models.ForeignKey(SourceList, on_delete=models.SET_NULL, null=True, blank=True,
+    source_list = models.ForeignKey(SourceList, on_delete=models.SET_NULL, null=True, blank=True,
                                          related_name='source_names')
     table_name = models.CharField(max_length=30, blank=True, null=True)
     source_system = models.ForeignKey(SourceSystem, on_delete=models.SET_NULL, null=True, blank=True)
@@ -114,6 +114,21 @@ class Query(models.Model):
 
 
 class Report(models.Model):
+    report_name = models.CharField(max_length=30)
+    field_list = models.ForeignKey(FieldList, on_delete=models.CASCADE, blank=True, null=True)
+    source_list = models.ForeignKey(SourceList, on_delete=models.CASCADE, blank=True, null=True)
+    report_description = models.TextField(blank=True, null=True)
+    report_url = models.TextField(blank=True, null=True)
+    version = models.CharField(max_length=10, null=True)
+    change_description = models.TextField(blank=True, null=True)
+    change_date = models.TextField(blank=True, null=True)
+    changed_by = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.report_name
+
+
+class Test(models.Model):
     report_name = models.CharField(max_length=30)
     field_list = models.ForeignKey(FieldList, on_delete=models.CASCADE, blank=True, null=True)
     source_list = models.ForeignKey(SourceList, on_delete=models.CASCADE, blank=True, null=True)

@@ -15,7 +15,7 @@ urlpatterns = [
     path("field_list/new/", field_list_edit),
 
     path("sources/", sources),
-    path("sources/<str:source_list_name>/<str:type>/", source_list_item),
+    path("sources/<str:source_list>/<str:type>/", source_list_item),
 
     path("source_lists/", source_lists),
     path("source_list/<str:source_list_name>/", source_list),
@@ -23,8 +23,12 @@ urlpatterns = [
     path("source_list/new/", source_list_edit),
 
     path("queries/", queries),
-
     path("query/<str:query_name>/", query),
 
-    path("test_static/", test_static),
+    path("reports/", reports),
+    path("report/<str:report_name>/", report),
+
+    path("diagram/<str:source_type>/<str:source_name>/", diagram),
+
+    # path("test_static/", test_static),
 ]
