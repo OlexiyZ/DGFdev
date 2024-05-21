@@ -298,53 +298,7 @@ def report(request, report_name):
 
 def diagram(request, source_type, source_name):
     linear = {}
-    linear = diagr_line(source_type, source_name)
-
-    # if source_type == 'report':
-    #     source = Report.objects.get(report_name=source_name)
-    #     linear["content"] = f"<a href=\"/dm/report/{source_name}/\" target=\"_blank\">{source_name}</a>"
-    #     # source_list = SourceList.objects.get(source_list_name=source.source_list)
-    # elif source_type == 'query':
-    #     source = Query.objects.get(query_name=source_name)
-    #     linear["content"] = f"<a href=\"/dm/query/{source_name}/\" target=\"_blank\">{source_name}</a>"
-    #     # source_list = SourceList.objects.get(source_list_name=source.source_list)
-    # elif source_type == 'data_source':
-    #     source = Source.objects.get(source_name=source_name)
-    #     linear["content"] = f"<a href=\"/dm/source_list/{source_name}/\" target=\"_blank\">{source_name}</a>"
-    #     # source_list = SourceList.objects.get(source_list_name=source.source_list)
-    # elif source_type == 'table':
-    #     # source = Query.objects.get(source_name=source_name)
-    #     linear["content"] = source_name
-
-    # source_list = SourceList.objects.get(source_list=source.source_list)
-    # sources = Source.objects.filter(source_union_list=source_list)
-    # field_list = FieldList.objects.get(data_source=source_list)
-    # fields = Field.objects.filter(source_list=source_list)
-
-    # for source in sources:
-    #     if source.source_type == 'data_source':
-    #         source_list = SourceList.objects.get(source_list_name=source.source_list_name)
-    #         sources = Source.objects.filter(source_union_list_name=source.source_list)
-    #         field_list = FieldList.objects.get(data_source=source_list)
-    #         fields = Field.objects.filter(source_list=source_list)
-    #     elif source.source_type == 'query':
-    #         query = Query.objects.get(query_name=source.query_name)
-    #         filtered_query = Query.objects.get(query_name=query)
-    #         linear["children"].append(filtered_query.query_name)
-    #         try:
-    #             source_list = SourceList.objects.get(source_list_name=query.source_list)
-    #         except SourceList.DoesNotExist:
-    #             source_list = None
-    #         try:
-    #             field_list = FieldList.objects.get(field_list_name=query.field_list)
-    #         except FieldList.DoesNotExist:
-    #             field_list = None
-    #         try:
-    #             fields = Field.objects.filter(field_list=query.field_list)
-    #         except Field.DoesNotExist:
-    #             fields = None
-    #     else:
-    #         None
+    linear = linearization(source_type, source_name, "")
 
     # scheme = {}
     # scheme["content"] = f"<a href=\"/dm/report/{source_name}/\" target=\"_blank\">{source_name}</a>"
@@ -371,83 +325,46 @@ def diagram(request, source_type, source_name):
     return render(request, 'dm/diagram.html', context)
 
 
-def linearization(sources):
-    if sources is None:
-        return None
-        #     {
-        #     "content": source_list.name,
-        #     "children": []
-        # }
+def linearization(source_type, source_name, fields2content):
+    blue_rect = "<svg width=\"10\" height=\"10\"> <rect x=\"0\" y=\"0\" width=\"10\" height=\"10\" fill=\"blue\" /></svg> "
+    green_rect = "<svg width=\"10\" height=\"10\"> <rect x=\"0\" y=\"0\" width=\"10\" height=\"10\" fill=\"green\" /></svg> "
+    brown_rect = "<svg width=\"10\" height=\"10\"> <rect x=\"0\" y=\"0\" width=\"10\" height=\"10\" fill=\"brown\" /></svg> "
+    purple_rect = "<svg width=\"10\" height=\"10\"> <rect x=\"0\" y=\"0\" width=\"10\" height=\"10\" fill=\"purple\" /></svg> "
+    yellow_rect = "<svg width=\"10\" height=\"10\"> <rect x=\"0\" y=\"0\" width=\"10\" height=\"10\" fill=\"yellow\" /></svg> "
 
-    children = []
-    for source in sources:
-        if source.source_type == 'data_source':
-            try:
-                source_list = SourceList.objects.get(source_list=source.source_list)
-                child_content = source_list.source_list_name
-            except SourceList.DoesNotExist:
-                source_list = None
-            try:
-                sources = Source.objects.filter(source_union_list=source.source_list)
-            except Source.DoesNotExist:
-                sources = None
-            try:
-                field_list = FieldList.objects.get(data_source=source_list)
-            except FieldList.DoesNotExist:
-                field_list = None
-            try:
-                fields = Field.objects.filter(source_list=source_list)
-            except Field.DoesNotExist:
-                fields = None
-
-            child_content = source_list.source_list_name
-            children.append(linearization(sources))
-            # children.append(create_nested_dict(child_content, depth - 1, num_children))
-
-        elif source.source_type == 'query':
-            query = Query.objects.get(query_name=source.query_name)
-            # filtered_query = Query.objects.get(query_name=query)
-            try:
-                source_list = SourceList.objects.get(source_list=query.source_list)
-            except SourceList.DoesNotExist:
-                source_list = None
-            try:
-                field_list = FieldList.objects.get(field_list_name=query.field_list)
-            except FieldList.DoesNotExist:
-                field_list = None
-            try:
-                fields = Field.objects.filter(field_list=query.field_list)
-            except Field.DoesNotExist:
-                fields = None
-        else:
-            None
-
-    return {
-        "content": source_list.name,
-        "children": children
-    }
-
-
-def diagr_line(source_type, source_name):
+# End of recursive
     if source_name == None:
         return {
             "content": "end"
         }
     elif source_type == 'table':
         return {
-            "content": source_name
+            "content": source_type,
+            "children": [
+                {
+                    "content": brown_rect + source_name
+                }
+            ]
         }
 
-
+# Begin recursive body
     children = []
+    f_fields = []
     if source_type == 'report':
         source = Report.objects.get(report_name=source_name)
         sources, source_list, field_list, fields = get_data_source(source)
         for source in sources:
-            children.append(diagr_line(source.source_type, source.query_name))
+            children.append(linearization(source.source_type, source.query_name, ""))
     elif source_type == 'query':
         source = Query.objects.get(query_name=source_name)
         sources, source_list, field_list, fields = get_query_source(source)
+
+        # f_fields = []
+        for field in fields:
+            field_name = {}
+            field_name["content"] = field.field_name
+            f_fields.append(field_name)
+
         for source in sources:
             if source.source_type == 'data_source':
                 f_source = source.source_list
@@ -455,7 +372,7 @@ def diagr_line(source_type, source_name):
                 f_source = source.query_name
             elif source.source_type == 'table':
                 f_source = source.table_name
-            children.append(diagr_line(source.source_type, f_source))
+            children.append(linearization(source.source_type, f_source, f_fields))
     elif source_type == 'data_source':
         source = Source.objects.get(source_list=source_name)
         sources, source_list, field_list, fields = get_data_source(source)
@@ -466,15 +383,43 @@ def diagr_line(source_type, source_name):
                 f_source = source.query_name
             elif source.source_type == 'table':
                 f_source = source.table_name
-            children.append(diagr_line(source.source_type, f_source))
+            children.append(linearization(source.source_type, f_source, f_fields))
     elif source_type == 'table':
-        children.append(diagr_line('table', source_name))
+        children.append(linearization('table', source_name, None))
     else:
-        children.append(diagr_line(None, None))
+        children.append(linearization(None, None, None))
 
+# End recursive body
+    if source_type == 'data_source':
+        content = blue_rect + str(source_name)
+    elif source_type == 'query':
+        content = green_rect + str(source_name)
+    # elif source_type == 'table':
+    #     content = yellow_rect + str(source_name)
+    elif source_type == 'report':
+        content = purple_rect + str(source_name)
+    else:
+        content = str(source_name)
+
+# Recursive return value
     return {
-        "content": str(source_name),
-        "children": children
+        "content": source_type,
+        "children": [
+            {
+              "content": str(field_list),
+              "children": f_fields
+                # [
+                #     fields2diagram
+                    # {
+                    #     "content": str(fields)
+                    # }
+                # ]
+            },
+            {
+                "content": content,
+                "children": children
+            }
+        ]
     }
 
 
@@ -541,23 +486,3 @@ def get_report_source(source):
 
     return sources, source_list, field_list, fields
 
-# def test_source(request, source_list_name, ch_source_list_name):
-#     if source_list_name != '0':
-#         source_list = SourceList.objects.get(source_union_list_name=source_list_name)
-#         filtered_sources = Source.objects.filter(source_union_list_name=source_list)
-#     else:
-#         source_list = SourceList.objects.get(source_list_name=ch_source_list_name)
-#         filtered_sources = Source.objects.filter(source_union_list_name=source_list)
-#
-#     all_source_lists = SourceList.objects.all()
-#     context = {
-#         'sources': filtered_sources,
-#         'source_lists': all_source_lists,
-#         'current_source_list': source_list,
-#         'nav_bar': nav_bar
-#     }
-#     return render(request, 'dm/sources.html', context)
-#
-#
-# def test_static(request):
-#     return render(request, 'dm/test_static.html')

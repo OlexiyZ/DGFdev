@@ -87,7 +87,13 @@
         () => window.markmap,
         null,
         {{ model|safe }},
-        { colorFreezeLevel: 5 }
+        // {
+        //   "color": ["blue","yellow", "green", "red"],
+        // },
+        {
+          colorFreezeLevel: 1,
+          initialExpandLevel: 2
+        }
       );
     </script>
   </body>
